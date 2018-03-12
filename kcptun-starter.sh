@@ -6,30 +6,44 @@
 APP_NAME=kcptun-starter
 #kcptun的目录
 APP_PATH=/opt/kcptun-starter/
+#kcptun server
+KCPTUN_SERVER=server_linux_amd64
 #配置文件路径
 CONFIG_PATH=/opt/kcptun-starter/server-config.json
 #日志文件
-LOG_PATH=/opt/kcptun-starter/kcptun-starter.log
+LOG_PATH=/opt/kcptun-starter/kcptun.log
+#执行程序启动所使用的系统用户，考虑到安全，推荐不使用root帐号
+RUNNING_USER=root
 
+#初始化psid变量（全局）
+psid=0
 
 ###################################
 #(函数)启动
 ###################################
 start() {
-   echo "$APP_NAME start..."
-   cd $APP_PATH
-   ./server_linux_amd64 -c $CONFIG_PATH > $LOG_PATH 2>&1 &
-   echo "$APP_NAME started..."
+   checkpid
+   if [ $psid -ne 0 ]; then
+      echo "================================"
+      echo "warn: $APP_NAME already started! (pid=$psid)"
+      echo "================================"
+   else
+      echo -n "Starting $APP_NAME ..."
+      KCPTUN_CMD="$APP_PATH$KCPTUN_SERVER -c $CONFIG_PATH >/dev/null 2>&1 &"
+      su - $RUNNING_USER -c "$KCPTUN_CMD"
+      checkpid
+      if [ $psid -ne 0 ]; then
+         echo "(pid=$psid) [OK]"
+      else
+         echo "[Failed]"
+      fi
+   fi
 }
 
-
-#初始化psid变量（全局）
-psid=0
-
 checkpid() {
-   starter=`server_linux_amd64`
+   starter=`ps -ef | grep $KCPTUN_SERVER | grep -v grep`
    if [ -n "$starter" ]; then
-	  psid=`ps -ef | grep $javaps | grep -v grep | awk '{print $2}'`
+	  psid=`echo $starter | awk '{print $2}'`
    else
       psid=0
    fi
