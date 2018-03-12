@@ -1,6 +1,6 @@
 {
-	"listen": ":29900",
-	"target": "ip:port",
+	"listen": ":8989",
+	"target": "ip:8765",
 	"key": "yourpassword",
 	"crypt": "salsa20",
 	"mode": "manual",

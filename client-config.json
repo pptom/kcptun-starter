@@ -1,0 +1,22 @@
+{
+  "localaddr": ":5678",
+  "remoteaddr": "ip:8989",
+  "key": "yourpassword",
+  "crypt": "salsa20",
+  "mode": "manual",
+  "mtu": 1400,
+  "sndwnd": 128,
+  "rcvwnd": 1024,
+  "datashard": 30,
+  "parityshard": 15,
+  "dscp": 46,
+  "conn": 1,
+  "autoexpire": 300,
+  "nocomp": true,
+  "nodelay": 0,
+  "interval": 20,
+  "resend": 2,
+  "nc": 1,
+  "sockbuf": 4194304,
+  "keepalive": 10
+}
